@@ -1,0 +1,19 @@
+{
+  "nodes": [
+    {"id": "Myriel", "group": 1, "img": "http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_captainamerica.png"},
+    {"id": "Count", "group": 1},
+    {"id": "Labarre", "group": 1},
+    {"id": "Tanaka", "group": 2},
+    {"id": "Napoleon", "group": 2},
+    {"id": "Valjean", "group": 2},
+    {"id": "Marguerite", "group": 2}
+  ],
+  "links": [
+    {"source": "Napoleon", "target": "Myriel", "value": 1},
+    {"source": "Count", "target": "Myriel", "value": 2},
+    {"source": "Myriel", "target": "Labarre", "value": 1},
+    {"source": "Napoleon", "target": "Tanaka", "value": 1},
+    {"source": "Valjean", "target": "Marguerite", "value": 3},
+    {"source": "Napoleon", "target": "Marguerite", "value": 10}
+  ]
+}
