@@ -2,11 +2,11 @@
 // and return the convex hull of the specified points
 // (3 points as minimum, otherwise returns null)
 function polygonGenerator(nodes, groupId) {
-  var circle_locations = nodes
+  var node_locations = nodes
     .filter(function(d) { return d.group == groupId; })
     .data()
     .map(function(d) { return [d.x, d.y]; });
-  return d3.polygonHull(circle_locations);
+  return d3.polygonHull(node_locations);
 };
 
 function updateGroups(nodes, groupIds, paths, scaleFactor) {
