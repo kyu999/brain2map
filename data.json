@@ -1,0 +1,23 @@
+{
+  "nodes": [
+    {"id": "Fruit", "group": 1, "img": ""},
+    {"id": "Apple", "group": 1, "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Red_Apple.jpg/250px-Red_Apple.jpg"},
+    {"id": "Orange", "group": 1, "img": "https://www.yamaguchisakiko.jp/wp-content/uploads/2016/04/%E8%B3%BC%E5%85%A5%E3%80%80%E3%81%BF%E3%81%8B%E3%82%93.jpg"},
+    {"id": "Grape", "group": 1, "img": "https://www.satofull.jp/upload/save_image/07141237_59683c61c9535.jpg"},
+    {"id": "Mango", "group": 1, "img": "http://www.tamaseika.co.jp/wp/wp-content/uploads/2015/06/IMG_0517.jpg"},
+    {"id": "Hero", "group": 2, "img": ""},
+    {"id": "Black-Window", "group": 2, "img": "http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_blackwidow.png"},
+    {"id": "Spider-Man", "group": 2, "img": "http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_spiderman.png"}
+  ],
+  "links": [
+    {"source": "Fruit", "target": "Apple", "value": 2},
+    {"source": "Fruit", "target": "Mango", "value": 2},
+    {"source": "Fruit", "target": "Orange", "value": 2},
+    {"source": "Fruit", "target": "Grape", "value": 1},
+    {"source": "Hero", "target": "Spider-Man", "value": 3},
+    {"source": "Hero", "target": "Black-Window", "value": 1},
+    {"source": "Black-Window", "target": "Apple", "value": 1, "arror": true},
+    {"source": "Black-Window", "target": "Mango", "value": 1, "arror": true},
+    {"source": "Spider-Man", "target": "Grape", "value": 5, "arror": true}
+  ]
+}

@@ -1,12 +1,12 @@
 var svg = d3.select('svg'),
     width = +svg.attr('width'),
     height = +svg.attr('height'),
-    color = d3.scaleOrdinal(d3.schemeCategory20),
+    color = d3.scaleOrdinal(d3.schemeCategory10),
     valueline = d3.line()
                   .x(function(d) { return d[0]; })
                   .y(function(d) { return d[1]; })
                   .curve(d3.curveCatmullRomClosed),
-    scaleFactor = 1.2,
+    scaleFactor = 1.3,
     simulation = d3.forceSimulation()
                    .force('link', d3.forceLink().id(function(d) { return d.id; }).distance(160).strength(0.7))
                    .force('charge', d3.forceManyBody())
@@ -47,8 +47,7 @@ d3.json('data.json', function(error, graph) {
                 .enter().append('line')
                 .attr('stroke-width', function(d) { return Math.sqrt(d.value); })
                 .attr('class', 'link')
-                .style('stroke-width', 1)
-                .style('marker-end', 'url(#arrow)');
+                .style('marker-end', function(d){ return d.arror ? 'url(#arrow)' : '' });
 
   var nodes_container = svg.append('g')
                            .attr('class', 'nodes')
@@ -95,15 +94,16 @@ d3.json('data.json', function(error, graph) {
       .on('end', group_dragended)
       );
 
-  var texts = nodes.append('text').text(function(d){ return d.id; })
-
   var circles = nodes.append('circle')
                      .attr('r', 20)
-                     .style("fill", function(d){ return 'url(#' + d.id + ')'})
+                     .attr('stroke', function(d){ return d.img === "" ? "gray" : "#fff" })
+                     .style("fill", function(d){ return d.img === "" ? color(d.group) : 'url(#' + d.id + ')'})
                      .call(d3.drag()
                      .on('start', dragstarted)
                      .on('drag', dragged)
                      .on('end', dragended));
+
+  var texts = nodes.append('text').text(function(d){ return d.id; })
 
   simulation
       .nodes(graph.nodes)
