@@ -1,21 +1,20 @@
 // select nodes of the group, retrieve its positions
 // and return the convex hull of the specified points
 // (3 points as minimum, otherwise returns null)
-function polygonGenerator(groupId) {
-  var node_coords = node
+function polygonGenerator(nodes, groupId) {
+  var circle_locations = nodes
     .filter(function(d) { return d.group == groupId; })
     .data()
     .map(function(d) { return [d.x, d.y]; });
-
-  return d3.polygonHull(node_coords);
+  return d3.polygonHull(circle_locations);
 };
 
-function updateGroups(groupIds, paths, scaleFactor) {
+function updateGroups(nodes, groupIds, paths, scaleFactor) {
   groupIds.forEach(function(groupId) {
     var path = paths.filter(function(d) { return d == groupId;})
       .attr('transform', 'scale(1) translate(0,0)')
       .attr('d', function(d) {
-        polygon = polygonGenerator(d);
+        polygon = polygonGenerator(nodes, d);
         centroid = d3.polygonCentroid(polygon);
 
         // to scale the shape properly around its points:

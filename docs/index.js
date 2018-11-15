@@ -12,7 +12,6 @@ var svg = d3.select('svg'),
     scaleFactor = 1.2,
     polygon,
     centroid,
-    node,
     link,
     simulation = d3.forceSimulation()
                    .force('link', d3.forceLink().id(function(d) { return d.id; }).distance(160).strength(0.7))
@@ -39,6 +38,7 @@ d3.json('data.json', function(error, graph) {
                          .attr("y", 0)
                          .attr("width", 40)
                          .attr("height", 40)
+                         .attr("opacity", 0.8)
                          .attr("xlink:href", function(d) {
                            return d.img;
                          })
@@ -56,17 +56,13 @@ d3.json('data.json', function(error, graph) {
               .style('stroke-width', 1)
               .style('marker-end', 'url(#arrow)');
 
-  node = svg.append('g')
-            .attr('class', 'nodes')
-            .selectAll('g')
-              .data(graph.nodes)
-              .enter().append('circle')
-                .attr('r', 20)
-                .style("fill", function(d){ return "url(#" + d.id +")"; })
-                .call(d3.drag()
-                      .on('start', dragstarted)
-                      .on('drag', dragged)
-                      .on('end', dragended));
+  var nodes_container = svg.append('g')
+                           .attr('class', 'nodes')
+
+  var nodes = nodes_container.selectAll('g')
+                             .data(graph.nodes)
+                             .enter()
+                             .append('g')
 
   // count members of each group. Groups with less
   // than 3 member will not be considered (creating
@@ -105,8 +101,18 @@ d3.json('data.json', function(error, graph) {
       .on('end', group_dragended)
       );
 
-  node.append('title')
-      .text(function(d) { return d.id; });
+  nodes.append('text').text(function(d){ return d.id; })
+
+  var circles = nodes.append('circle')
+                     .attr('r', 20)
+                     .style("fill", function(d){ return 'url(#' + d.id + ')'})
+                     .call(d3.drag()
+                     .on('start', dragstarted)
+                     .on('drag', dragged)
+                     .on('end', dragended));
+
+  var texts = nodes.append('title')
+                   .text(function(d) { return d.id; });
 
   simulation
       .nodes(graph.nodes)
@@ -120,11 +126,9 @@ d3.json('data.json', function(error, graph) {
         .attr('y1', function(d) { return d.source.y; })
         .attr('x2', function(d) { return d.target.x; })
         .attr('y2', function(d) { return d.target.y; });
-    node
-        .attr('cx', function(d) { return d.x; })
-        .attr('cy', function(d) { return d.y; });
+    nodes.attr('transform', function(d){ return 'scale(1) translate(' + d.x + ',' + d.y + ')'; })
 
-    updateGroups(groupIds, paths, scaleFactor);
+    updateGroups(nodes, groupIds, paths, scaleFactor);
   }
 
 });
