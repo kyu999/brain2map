@@ -1,7 +1,7 @@
 // select nodes of the group, retrieve its positions
 // and return the convex hull of the specified points
 // (3 points as minimum, otherwise returns null)
-var polygonGenerator = function(groupId) {
+function polygonGenerator(groupId) {
   var node_coords = node
     .filter(function(d) { return d.group == groupId; })
     .data()
@@ -32,6 +32,7 @@ function updateGroups(groupIds, paths, scaleFactor) {
     d3.select(path.node().parentNode).attr('transform', 'translate('  + centroid[0] + ',' + (centroid[1]) + ') scale(' + scaleFactor + ')');
   });
 }
+
 // drag nodes
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
