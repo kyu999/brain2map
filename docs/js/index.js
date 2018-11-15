@@ -16,7 +16,7 @@ var defs = svg.append("defs")
 
 setArrow(svg);
 
-d3.json('data.json', function(error, graph) {
+d3.json('data/sample.json', function(error, graph) {
   if (error) { throw error; }
 
   var imgPattern = defs.selectAll("pattern")
