@@ -14,50 +14,34 @@ var svg = d3.select('svg'),
     centroid,
     node,
     link,
-    curveTypes = ['curveBasisClosed', 'curveCardinalClosed', 'curveCatmullRomClosed', 'curveLinearClosed'],
     simulation = d3.forceSimulation()
-                   .force('link', d3.forceLink().id(function(d) { return d.id; }).distance(30).strength(0.05))
+                   .force('link', d3.forceLink().id(function(d) { return d.id; }).distance(160).strength(0.7))
                    .force('charge', d3.forceManyBody())
                    .force('center', d3.forceCenter(width / 2, height / 2))
 
 var defs = svg.append("defs")
-var imgPattern = defs.selectAll("pattern").data([0])
-  .enter()
-.append("pattern")
-    .attr("id", 'img_7')
-    .attr("width", 1)
-    .attr("height", 1)
-    .attr("patternUnits", "objectBoundingBox")
-  .append("image")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("width", 40)
-    .attr("height", 40)
-    .attr("xlink:href", function(d) {
-      return "http://image.news.livedoor.com/newsimage/9/2/92c5a_137_db5bac69_2ac8288c-cm.jpg?v=20170820144734";
-    })
 
 setArrow(svg);
 
 d3.json('data.json', function(error, graph) {
-  if (error) throw error;
+  if (error) { throw error; }
 
-  // create selector for curve types
-  var select = d3.select('#curveSettings')
-                 .append('select')
-                 .attr('class','select')
-                 .on('change', function() {
-                     var val = d3.select('select').property('value');
-                     d3.select('#curveLabel').text(val);
-                     valueline.curve(d3[val]);
-                     updateGroups();
-                 });
-
-  var options = select
-    .selectAll('option')
-    .data(curveTypes).enter()
-    .append('option')
-    .text(function (d) { return d; });
+  var imgPattern = defs.selectAll("pattern")
+                       .data(graph.nodes)
+                       .enter()
+                       .append("pattern")
+                         .attr("id", 'img_7')
+                         .attr("width", 1)
+                         .attr("height", 1)
+                         .attr("patternUnits", "objectBoundingBox")
+                       .append("image")
+                         .attr("x", 0)
+                         .attr("y", 0)
+                         .attr("width", 40)
+                         .attr("height", 40)
+                         .attr("xlink:href", function(d) {
+                           return d.img;
+                         })
 
   // create groups, links and nodes
   groups = svg.append('g').attr('class', 'groups');
@@ -77,12 +61,12 @@ d3.json('data.json', function(error, graph) {
             .selectAll('g')
               .data(graph.nodes)
               .enter().append('circle')
-              .attr('r', 20)
-              .style("fill", "url(#img_7)")
-              .call(d3.drag()
-                    .on('start', dragstarted)
-                    .on('drag', dragged)
-                    .on('end', dragended));
+                .attr('r', 20)
+                .style("fill", "url(#img_7)")
+                .call(d3.drag()
+                      .on('start', dragstarted)
+                      .on('drag', dragged)
+                      .on('end', dragended));
 
   // count members of each group. Groups with less
   // than 3 member will not be considered (creating
@@ -140,19 +124,7 @@ d3.json('data.json', function(error, graph) {
         .attr('cx', function(d) { return d.x; })
         .attr('cy', function(d) { return d.y; });
 
-    updateGroups();
+    updateGroups(groupIds, paths, scaleFactor);
   }
 
 });
-
-// select nodes of the group, retrieve its positions
-// and return the convex hull of the specified points
-// (3 points as minimum, otherwise returns null)
-var polygonGenerator = function(groupId) {
-  var node_coords = node
-    .filter(function(d) { return d.group == groupId; })
-    .data()
-    .map(function(d) { return [d.x, d.y]; });
-
-  return d3.polygonHull(node_coords);
-};

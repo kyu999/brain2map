@@ -1,4 +1,16 @@
-function updateGroups() {
+// select nodes of the group, retrieve its positions
+// and return the convex hull of the specified points
+// (3 points as minimum, otherwise returns null)
+var polygonGenerator = function(groupId) {
+  var node_coords = node
+    .filter(function(d) { return d.group == groupId; })
+    .data()
+    .map(function(d) { return [d.x, d.y]; });
+
+  return d3.polygonHull(node_coords);
+};
+
+function updateGroups(groupIds, paths, scaleFactor) {
   groupIds.forEach(function(groupId) {
     var path = paths.filter(function(d) { return d == groupId;})
       .attr('transform', 'scale(1) translate(0,0)')

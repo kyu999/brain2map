@@ -4,22 +4,13 @@
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <div id="scaleFactorSettings">
-    <p>Scale of the groups: <span id='scaleFactorLabel'>1.2</span></p>
-    <input type="range" min="1" max="3" value="1.2" step=".1"
-      oninput="scaleFactor = value; d3.select('#scaleFactorLabel').text(scaleFactor); updateGroups()">
-  </div>
-  <div id="curveSettings">
-    <p>Type of curve: <span id='curveLabel'>curveCatmullRomClosed</span></p>
-  </div>
-  <svg width='960' height='600'>
-    <defs>
-      <pattern id="img_1" width="1" height="1">
-        <image x="0" y="0" width="150" height="150" xlink:href="http://lorempixel.com/150/150/people/1"></image>
-      </pattern>
-    </defs>
-    <circle cx="150" cy="400" r="75" style="fill: url(#img_1);"></circle>
-  </svg>
+  <svg width="960" height="500">
+    <g transform="translate(100,100)">
+        <circle r="47" stroke="black" fill="white"></circle>
+        <image xlink:href="http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_spiderman.png" x="-50" y="-50" height="100" width="100"></image>
+       	<text class="nodetext" x="-40" y="0" fill="#130C0E">Spider-Man</text>
+    </g>
+ </svg>
 </body>
 
 <script src='https://d3js.org/d3.v4.min.js'></script>
