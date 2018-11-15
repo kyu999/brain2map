@@ -6,13 +6,7 @@ var svg = d3.select('svg'),
                   .x(function(d) { return d[0]; })
                   .y(function(d) { return d[1]; })
                   .curve(d3.curveCatmullRomClosed),
-    paths,
-    groups,
-    groupIds,
     scaleFactor = 1.2,
-    polygon,
-    centroid,
-    link,
     simulation = d3.forceSimulation()
                    .force('link', d3.forceLink().id(function(d) { return d.id; }).distance(160).strength(0.7))
                    .force('charge', d3.forceManyBody())
@@ -44,17 +38,17 @@ d3.json('data.json', function(error, graph) {
                          })
 
   // create groups, links and nodes
-  groups = svg.append('g').attr('class', 'groups');
+  var groups = svg.append('g').attr('class', 'groups');
 
-  link = svg.append('g')
-            .attr('class', 'links')
-              .selectAll('line')
-              .data(graph.links)
-              .enter().append('line')
-              .attr('stroke-width', function(d) { return Math.sqrt(d.value); })
-              .attr('class', 'link')
-              .style('stroke-width', 1)
-              .style('marker-end', 'url(#arrow)');
+  var link = svg.append('g')
+                .attr('class', 'links')
+                .selectAll('line')
+                .data(graph.links)
+                .enter().append('line')
+                .attr('stroke-width', function(d) { return Math.sqrt(d.value); })
+                .attr('class', 'link')
+                .style('stroke-width', 1)
+                .style('marker-end', 'url(#arrow)');
 
   var nodes_container = svg.append('g')
                            .attr('class', 'nodes')
@@ -67,26 +61,26 @@ d3.json('data.json', function(error, graph) {
   // count members of each group. Groups with less
   // than 3 member will not be considered (creating
   // a convex hull need 3 points at least)
-  groupIds = d3.set(graph.nodes.map(function(n) { return +n.group; }))
-    .values()
-    .map( function(groupId) {
-      return {
-        groupId : groupId,
-        count : graph.nodes.filter(function(n) { return +n.group == groupId; }).length
-      };
-    })
-    .filter( function(group) { return group.count > 2;})
-    .map( function(group) { return group.groupId; });
+  var groupIds = d3.set(graph.nodes.map(function(n) { return +n.group; }))
+                   .values()
+                   .map( function(groupId) {
+                     return {
+                       groupId : groupId,
+                       count : graph.nodes.filter(function(n) { return +n.group == groupId; }).length
+                     };
+                   })
+                   .filter( function(group) { return group.count > 2;})
+                   .map( function(group) { return group.groupId; });
 
-  paths = groups.selectAll('.path_placeholder')
-    .data(groupIds, function(d) { return +d; })
-    .enter()
-    .append('g')
-    .attr('class', 'path_placeholder')
-    .append('path')
-    .attr('stroke', function(d) { return color(d); })
-    .attr('fill', function(d) { return color(d); })
-    .attr('opacity', 0);
+  var paths = groups.selectAll('.path_placeholder')
+                    .data(groupIds, function(d) { return +d; })
+                    .enter()
+                    .append('g')
+                    .attr('class', 'path_placeholder')
+                    .append('path')
+                    .attr('stroke', function(d) { return color(d); })
+                    .attr('fill', function(d) { return color(d); })
+                    .attr('opacity', 0);
 
   paths
     .transition()
@@ -101,7 +95,7 @@ d3.json('data.json', function(error, graph) {
       .on('end', group_dragended)
       );
 
-  nodes.append('text').text(function(d){ return d.id; })
+  var texts = nodes.append('text').text(function(d){ return d.id; })
 
   var circles = nodes.append('circle')
                      .attr('r', 20)
@@ -110,9 +104,6 @@ d3.json('data.json', function(error, graph) {
                      .on('start', dragstarted)
                      .on('drag', dragged)
                      .on('end', dragended));
-
-  var texts = nodes.append('title')
-                   .text(function(d) { return d.id; });
 
   simulation
       .nodes(graph.nodes)
